@@ -1,12 +1,19 @@
 from django.shortcuts import render
-from .forms import RegistrationForm
+from django.views.generic.edit import CreateView
+from django.urls import reverse_lazy
 from .models import User
-from jdatetime import date as jdate
+from .forms import RegisterForm
 # Create your views here.
 
 
-def register(request):
-    if request.method == 'POST':
-        print(request.POST)
+class UserRegistrationView(CreateView):
+    model = User
+    form_class = RegisterForm
+    template_name = 'register.html'
+    success_url = reverse_lazy('register')
 
-    return render(request, 'register.html')
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        return super().form_invalid(form)

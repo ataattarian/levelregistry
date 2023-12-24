@@ -98,7 +98,22 @@
           </h1>
         </div>
       </div>
-
+      <div>
+        <div class="card">
+          {% if form.errors %}
+            <div class="alert alert-danger">
+                <strong>خطا!</strong> لطفاً موارد زیر را بررسی کنید:
+                <ul>
+                    {% for field, error_list in form.errors.items %}
+                        {% for error in error_list %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+          {% endif %}
+        </div>
+      </div>
       <form id="regForm" action="{% url 'register' %}" method="POST">
         {% csrf_token %}
 
@@ -175,7 +190,8 @@
         <div class="tab">
           رضایت نامه :
           <p>رضایت دارم تا فرزندم در این مسابقات شرکت کند</p>
-          <canvas id="signatureCanvas" width="400" height="200" name="signature"></canvas>
+          <canvas id="signatureCanvas" width="400" height="200"></canvas>
+          <input type="hidden" name="signature_data" id="signature" />
           <button
             class="btn btn-warning"
             type="button"
@@ -252,6 +268,11 @@
       // if you have reached the end of the form... :
       if (currentTab >= x.length) {
           //...the form gets submitted:
+          const canvas = document.getElementById("signatureCanvas");
+          console.log('hoooo')
+          const imageData = canvas.toDataURL();
+          console.log("Signature saved:", imageData);
+          document.getElementById("signature").value = imageData;
           document.getElementById("regForm").submit();
           return false;
       }
@@ -341,8 +362,10 @@
         }
 
         function saveSignature() {
+          console.log('hoooo')
           const imageData = canvas.toDataURL();
           console.log("Signature saved:", imageData);
+          document.getElementById("signature").value = imageData;
           // Add code here to send the imageData to your server or process it as needed
         }
       });
