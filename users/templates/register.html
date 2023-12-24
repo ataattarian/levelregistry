@@ -11,7 +11,9 @@
     />
     <style>
       body {
-        font-family: Vazirmatn, sans-serif;
+        --bs-body-font-family: Vazirmatn, sans-serif;
+        --bs-body-line-height: 1.4;
+        --bs-body-bg: var(--bs-gray-100);
       }
       #signatureCanvas {
         border: 1px solid #ccc;
@@ -89,25 +91,29 @@
   </head>
   <body>
     <div>
+      <div class="card">
+        <div class="card-body">
+          <h1 class="card-title text-center">
+            ثبت نام در رویداد گلوبال گیم جم نکست 2024
+          </h1>
+        </div>
+      </div>
+
       <form id="regForm" action="{% url 'register' %}" method="POST">
         {% csrf_token %}
-        <h1 class="text-center">ثبت نام گلوبال گیم جم</h1>
 
         <!-- One "tab" for each step in the form: -->
         <div class="tab">
-          مشخصات فردی :
+          <h2>مشخصات فردی :</h2>
+          <hr />
           <p>
-            <input
-              placeholder="نام"
-              oninput="this.className = ''"
-              name="first_name"
-            />
+            <input placeholder="نام" name="first_name" class="form-control" />
           </p>
           <p>
             <input
               placeholder="نام خانوادگی"
-              oninput="this.className = ''"
               name="last_name"
+              class="form-control"
             />
           </p>
           <p>
@@ -115,61 +121,52 @@
               type="text"
               data-jdp
               placeholder="تاریخ تولد"
-              oninput="this.className = ''"
+              class="form-control"
               name="birth_date"
             />
           </p>
         </div>
 
         <div class="tab">
-          اطلاعات تماس :
+          <h2>اطلاعات تماس :</h2>
+          <hr />
           <p>
             <input
               placeholder="شماره تماس"
-              oninput="this.className = ''"
+              class="form-control"
               name="phone_number"
             />
           </p>
           <p>
-            <input
-              placeholder="ایمیل"
-              oninput="this.className = ''"
-              name="email"
-            />
+            <input placeholder="ایمیل" class="form-control" name="email" />
           </p>
         </div>
 
         <div class="tab">
-          محل زندگی :
+          <h2>محل زندگی :</h2>
+          <hr />
           <p>
-            <input
-              placeholder="استان"
-              oninput="this.className = ''"
-              name="state"
-            />
+            <input placeholder="استان" class="form-control" name="state" />
           </p>
           <p>
-            <input
-              placeholder="شهر"
-              oninput="this.className = ''"
-              name="city"
-            />
+            <input placeholder="شهر" class="form-control" name="city" />
           </p>
         </div>
 
         <div class="tab">
-          تحصیل :
+          <h2>تحصیل :</h2>
+          <hr />
           <p>
             <input
               placeholder="اسم مدرسه"
-              oninput="this.className = ''"
+              class="form-control"
               name="school_name"
             />
           </p>
           <p>
             <input
               placeholder="پایه تحصیلی"
-              oninput="this.className = ''"
+              class="form-control"
               name="grade"
             />
           </p>
@@ -179,17 +176,32 @@
           رضایت نامه :
           <p>رضایت دارم تا فرزندم در این مسابقات شرکت کند</p>
           <canvas id="signatureCanvas" width="400" height="200"></canvas>
-          <button type="button" id="clear" onclick="clearSignature()">
+          <button
+            class="btn btn-warning"
+            type="button"
+            id="clear"
+            onclick="clearSignature()"
+          >
             پاک کردن
           </button>
         </div>
 
         <div style="overflow: auto">
           <div style="float: right">
-            <button type="button" id="prevBtn" onclick="nextPrev(-1)">
+            <button
+              class="btn btn-info"
+              type="button"
+              id="prevBtn"
+              onclick="nextPrev(-1)"
+            >
               قبلی
             </button>
-            <button type="button" id="nextBtn" onclick="nextPrev(1)">
+            <button
+              class="btn btn-primary"
+              type="button"
+              id="nextBtn"
+              onclick="nextPrev(1)"
+            >
               بعدی
             </button>
           </div>
@@ -289,29 +301,26 @@
       document.addEventListener("DOMContentLoaded", function () {
         const canvas = document.getElementById("signatureCanvas");
         const ctx = canvas.getContext("2d");
-        let drawing = false;
+        let isDrawing = false;
 
-        canvas.addEventListener("mousedown", startDrawing);
-        canvas.addEventListener("mousemove", draw);
-        canvas.addEventListener("mouseup", stopDrawing);
-        canvas.addEventListener("mouseout", stopDrawing);
+        canvas.addEventListener("mousedown", (e) => {
+          isDrawing = true;
+          startPosition(e);
+        });
+        canvas.addEventListener("mousemove", (e) => {
+          if (isDrawing) {
+            draw(e);
+          }
+        });
+        canvas.addEventListener("mouseup", () => {
+          isDrawing = false;
+          endPosition();
+        });
+        canvas.addEventListener("mouseout", () => {
+          isDrawing = false;
+        });
 
-        function startDrawing(e) {
-          drawing = true;
-          draw(e);
-        }
-
-        function draw(e) {
-          if (!drawing) return;
-          ctx.lineWidth = 2;
-          ctx.lineCap = "round";
-          ctx.strokeStyle = "#000";
-
-          ctx.lineTo(
-            e.clientX - canvas.offsetLeft,
-            e.clientY - canvas.offsetTop
-          );
-          ctx.stroke();
+        function startPosition(e) {
           ctx.beginPath();
           ctx.moveTo(
             e.clientX - canvas.offsetLeft,
@@ -319,21 +328,30 @@
           );
         }
 
-        function stopDrawing() {
-          drawing = false;
+        function draw(e) {
+          ctx.lineTo(
+            e.clientX - canvas.offsetLeft,
+            e.clientY - canvas.offsetTop
+          );
+          ctx.stroke();
+        }
+
+        function endPosition() {
           ctx.beginPath();
         }
 
-        function clearSignature() {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
-
         function saveSignature() {
-          const imageData = canvas.toDataURL(); // You can send this data to your server or use it as needed
+          const imageData = canvas.toDataURL();
           console.log("Signature saved:", imageData);
           // Add code here to send the imageData to your server or process it as needed
         }
       });
+
+      function clearSignature() {
+        const canvas = document.getElementById("signatureCanvas");
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
     </script>
   </body>
 </html>
