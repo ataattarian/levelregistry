@@ -32,7 +32,7 @@ class User(AbstractUser):
     state = models.CharField(max_length=50, null=True, blank=True)
     grade = models.CharField(max_length=10, null=True, blank=True)
     school_name = models.CharField(max_length=100, null=True, blank=True)
-    signature = models.ImageField(upload_to ='media/',null=True, blank=True)
+    signature = models.ImageField(upload_to ='signature/',null=True, blank=True)
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']

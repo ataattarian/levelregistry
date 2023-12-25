@@ -23,6 +23,7 @@ class RegisterForm(ModelForm):
     
     def save(self, commit=True):
         user = super().save(commit=False)
+        user.signature.save(f'{user.email}.png', self.cleaned_data.get('signature'))
         user.username = user.email
         if commit:
             user.save()
@@ -30,7 +31,6 @@ class RegisterForm(ModelForm):
     
     def clean_birthdate(self):
         birthdate = self.cleaned_data.get('birthdate')
-        print(self.cleaned_data.get('signature'))
         # Your custom validation logic for the birthdate field
         if birthdate:
             age = 1403 - int(birthdate.split('/')[0])

@@ -191,7 +191,6 @@
           رضایت نامه :
           <p>رضایت دارم تا فرزندم در این مسابقات شرکت کند</p>
           <canvas id="signatureCanvas" width="400" height="200"></canvas>
-          <input type="hidden" name="signature_data" id="signature" />
           <button
             class="btn btn-warning"
             type="button"
@@ -200,15 +199,7 @@
           >
             پاک کردن
           </button>
-          <button
-            class="btn btn-success"
-            type="button"
-            id="save"
-            onclick="saveSignature()"
-          >
-            ذخیره امضا
-          </button>
-          <input type="text" id="signature" name="signature" hidden />
+          <input type="text" id="signature" name="signature"  hidden />
         </div>
 
         <div style="overflow: auto">
@@ -277,11 +268,7 @@
       // if you have reached the end of the form... :
       if (currentTab >= x.length) {
           //...the form gets submitted:
-          const canvas = document.getElementById("signatureCanvas");
-          console.log('hoooo')
-          const imageData = canvas.toDataURL();
-          console.log("Signature saved:", imageData);
-          document.getElementById("signature").value = imageData;
+          saveSignature()
           document.getElementById("regForm").submit();
           return false;
       }
@@ -369,17 +356,6 @@
         function endPosition() {
           ctx.beginPath();
         }
-<<<<<<< HEAD
-=======
-
-        function saveSignature() {
-          console.log('hoooo')
-          const imageData = canvas.toDataURL();
-          console.log("Signature saved:", imageData);
-          document.getElementById("signature").value = imageData;
-          // Add code here to send the imageData to your server or process it as needed
-        }
->>>>>>> 81255cdba155b20242460a87544e2a744757b967
       });
 
       function saveSignature() {
