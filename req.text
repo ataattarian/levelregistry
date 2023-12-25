@@ -4,4 +4,5 @@ django-environ==0.11.2
 environ==1.0
 jalali==1.2
 jdatetime==4.1.1
+Pillow==10.1.0
 sqlparse==0.4.4

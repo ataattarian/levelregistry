@@ -1,15 +1,42 @@
+from typing import Any
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.forms import ModelForm
 from .models import User
+from django.utils import timezone
+from django.core.exceptions import ValidationError
 
-class RegistrationForm(UserCreationForm):
-    phoneNumber = forms.CharField(max_length=15, required=True)
-    birthdate = forms.DateField(required=True)
-    city = forms.ChoiceField(choices=[('tehran', 'Tehran'), ('isfahan', 'Isfahan')], required=True)
-    state = forms.ChoiceField(choices=[('tehran', 'Tehran'), ('esfahan', 'Esfahan')], required=True)
-    grade = forms.CharField(max_length=10, required=True)
-    school_name = forms.CharField(max_length=100, required=True)
-    
+class RegisterForm(ModelForm):
     class Meta:
         model = User
-        fields = ['email', 'phoneNumber', 'birthdate', 'city', 'state', 'grade', 'school_name']
+        fields = [
+            "first_name",
+            "last_name",
+            "birthdate",
+            "phoneNumber",
+            "email",
+            "state",
+            "city",
+            "school_name",
+            "grade",
+            "signature"
+            ]
+    
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.username = user.email
+        if commit:
+            user.save()
+        return user
+    
+    def clean_birthdate(self):
+        birthdate = self.cleaned_data.get('birthdate')
+        print(self.cleaned_data.get('signature'))
+        # Your custom validation logic for the birthdate field
+        if birthdate:
+            age = 1403 - int(birthdate.split('/')[0])
+            if age > 17:
+                raise ValidationError(
+                    f"این مسابقات برای نوجوانان زیر ۱۷ سال میباشد",
+                )
+
+        return birthdate
