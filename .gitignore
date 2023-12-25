@@ -227,3 +227,4 @@ dmypy.json
 .devcontainer
 db.sqlite3
 */migrations/*
+static
