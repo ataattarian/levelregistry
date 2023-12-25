@@ -14,6 +14,7 @@
 *.pot
 *.pyc
 __pycache__/
+*/__pycache__/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
@@ -34,7 +35,6 @@ file/
 
 # Distribution / packaging
 self_test.py
-*.json
 .Python
 build/
 develop-eggs/
