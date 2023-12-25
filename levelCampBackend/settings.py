@@ -74,7 +74,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'levelCampBackend.wsgi.application'
+WSGI_APPLICATION = 'levelCampBackend.wsgi.app'
 
 
 # Database
