@@ -6,14 +6,11 @@ from django.utils.html import format_html
 # Register your models here.
 
 class UserAdmin(BaseUserAdmin):
-    list_display = ['email', 'first_name', 'last_name', 'is_active', 'is_staff','display_signature']
+    list_display = ['email', 'first_name', 'last_name', 'is_active', 'is_staff']
     search_fields = ['email', 'first_name', 'last_name']
     list_filter = ['is_active', 'is_staff']
-    
-    def display_signature(self, obj):
-        if obj.signature:
-            return format_html('<img src="{}" width="50" height="50" />', obj.signature.url)
-        return None
-    display_signature.short_description = 'Signature'
+    fieldsets = (None,{
+        'fields':('email','phoneNumber','birthdate','city','state','grade','school_name')
+    })
     
 admin.site.register(User, UserAdmin)
