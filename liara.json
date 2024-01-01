@@ -1,0 +1,12 @@
+{
+    "disks":[
+        {
+            "name":"sqlite",
+            "mountTo":"data"
+        },
+        {
+            "name":"data",
+            "mountTo":"media"
+        }
+    ]
+}
