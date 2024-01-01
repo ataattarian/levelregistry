@@ -18,12 +18,11 @@ class RegisterForm(ModelForm):
             "city",
             "school_name",
             "grade",
-            "signature"
             ]
     
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.signature.save(f'{user.email}.png', self.cleaned_data.get('signature'))
+        # user.signature.save(f'{user.email}.png', self.cleaned_data.get('signature'))
         user.username = user.email
         if commit:
             user.save()
