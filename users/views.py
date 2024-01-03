@@ -17,16 +17,7 @@ class UserRegistrationView(CreateView):
     def post(self, request, *args, **kwargs):
         form = self.get_form()
 
-        if form.is_valid():
-            # Decode the base64 data
-            signature_data = form.data.get('signature')
-            if signature_data:
-                signature_data = signature_data.split(',')[1]
-                signature_decoded = base64.b64decode(signature_data)
-
-                # Save the decoded data as an image file
-                form.cleaned_data['signature'] = ContentFile(signature_decoded, name='signature.png') 
-
+        if form.is_valid(): 
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
