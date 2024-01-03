@@ -28,6 +28,8 @@ class RegisterForm(ModelForm):
             user.save()
         return user
     
+    
+    
     def clean_birthdate(self):
         birthdate = self.cleaned_data.get('birthdate')
         # Your custom validation logic for the birthdate field
